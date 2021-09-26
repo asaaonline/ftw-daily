@@ -1,6 +1,7 @@
 import { updatedEntities, denormalisedEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import { parse } from '../../util/urlHelpers';
+import { types as sdkTypes } from '../../util/sdkLoader';
 
 // Pagination page size might need to be dynamic on responsive page layouts
 // Current design has max 3 columns 42 is divisible by 2 and 3
@@ -9,20 +10,20 @@ const RESULT_PAGE_SIZE = 42;
 
 // ================ Action types ================ //
 
-export const FETCH_LISTINGS_REQUEST = 'app/ManageListingsPage/FETCH_LISTINGS_REQUEST';
-export const FETCH_LISTINGS_SUCCESS = 'app/ManageListingsPage/FETCH_LISTINGS_SUCCESS';
-export const FETCH_LISTINGS_ERROR = 'app/ManageListingsPage/FETCH_LISTINGS_ERROR';
+export const WISH_LIST_FETCH_LISTINGS_REQUEST = 'app/WishListPage/FETCH_LISTINGS_REQUEST';
+export const WISH_LIST_FETCH_LISTINGS_SUCCESS = 'app/WishListPage/FETCH_LISTINGS_SUCCESS';
+export const WISH_LIST_FETCH_LISTINGS_ERROR = 'app/WishListPage/FETCH_LISTINGS_ERROR';
 
-export const OPEN_LISTING_REQUEST = 'app/ManageListingsPage/OPEN_LISTING_REQUEST';
-export const OPEN_LISTING_SUCCESS = 'app/ManageListingsPage/OPEN_LISTING_SUCCESS';
-export const OPEN_LISTING_ERROR = 'app/ManageListingsPage/OPEN_LISTING_ERROR';
+export const WISH_LIST_OPEN_LISTING_REQUEST = 'app/WishListPage/OPEN_LISTING_REQUEST';
+export const WISH_LIST_OPEN_LISTING_SUCCESS = 'app/WishListPage/OPEN_LISTING_SUCCESS';
+export const WISH_LIST_OPEN_LISTING_ERROR = 'app/WishListPage/OPEN_LISTING_ERROR';
 
-export const CLOSE_LISTING_REQUEST = 'app/ManageListingsPage/CLOSE_LISTING_REQUEST';
-export const CLOSE_LISTING_SUCCESS = 'app/ManageListingsPage/CLOSE_LISTING_SUCCESS';
-export const CLOSE_LISTING_ERROR = 'app/ManageListingsPage/CLOSE_LISTING_ERROR';
+export const WISH_LIST_CLOSE_LISTING_REQUEST = 'app/WishListPage/CLOSE_LISTING_REQUEST';
+export const WISH_LIST_CLOSE_LISTING_SUCCESS = 'app/WishListPage/CLOSE_LISTING_SUCCESS';
+export const WISH_LIST_CLOSE_LISTING_ERROR = 'app/WishListPage/CLOSE_LISTING_ERROR';
 
-export const ADD_OWN_ENTITIES = 'app/ManageListingsPage/ADD_OWN_ENTITIES';
-
+export const WISH_LIST_ADD_OWN_ENTITIES = 'app/WishListPage/ADD_OWN_ENTITIES';
+const { UUID } = sdkTypes;
 // ================ Reducer ================ //
 
 const initialState = {
@@ -61,10 +62,10 @@ const updateListingAttributes = (state, listingEntity) => {
   };
 };
 
-const manageListingsPageReducer = (state = initialState, action = {}) => {
+const WishListPageReducer = (state = initialState, action = {}) => {
   const { type, payload } = action;
   switch (type) {
-    case FETCH_LISTINGS_REQUEST:
+    case WISH_LIST_FETCH_LISTINGS_REQUEST:
       return {
         ...state,
         queryParams: payload.queryParams,
@@ -72,30 +73,30 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
         queryListingsError: null,
         currentPageResultIds: [],
       };
-    case FETCH_LISTINGS_SUCCESS:
+    case WISH_LIST_FETCH_LISTINGS_SUCCESS:
       return {
         ...state,
         currentPageResultIds: resultIds(payload.data),
         pagination: payload.data.meta,
         queryInProgress: false,
       };
-    case FETCH_LISTINGS_ERROR:
+    case WISH_LIST_FETCH_LISTINGS_ERROR:
       // eslint-disable-next-line no-console
       console.error(payload);
       return { ...state, queryInProgress: false, queryListingsError: payload };
 
-    case OPEN_LISTING_REQUEST:
+    case WISH_LIST_OPEN_LISTING_REQUEST:
       return {
         ...state,
         openingListing: payload.listingId,
         openingListingError: null,
       };
-    case OPEN_LISTING_SUCCESS:
+    case WISH_LIST_OPEN_LISTING_SUCCESS:
       return {
         ...updateListingAttributes(state, payload.data),
         openingListing: null,
       };
-    case OPEN_LISTING_ERROR: {
+    case WISH_LIST_OPEN_LISTING_ERROR: {
       // eslint-disable-next-line no-console
       console.error(payload);
       return {
@@ -108,18 +109,18 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
       };
     }
 
-    case CLOSE_LISTING_REQUEST:
+    case WISH_LIST_CLOSE_LISTING_REQUEST:
       return {
         ...state,
         closingListing: payload.listingId,
         closingListingError: null,
       };
-    case CLOSE_LISTING_SUCCESS:
+    case WISH_LIST_CLOSE_LISTING_SUCCESS:
       return {
         ...updateListingAttributes(state, payload.data),
         closingListing: null,
       };
-    case CLOSE_LISTING_ERROR: {
+    case WISH_LIST_CLOSE_LISTING_ERROR: {
       // eslint-disable-next-line no-console
       console.error(payload);
       return {
@@ -132,7 +133,7 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
       };
     }
 
-    case ADD_OWN_ENTITIES:
+    case WISH_LIST_ADD_OWN_ENTITIES:
       return merge(state, payload);
 
     default:
@@ -140,7 +141,7 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
   }
 };
 
-export default manageListingsPageReducer;
+export default WishListPageReducer;
 
 // ================ Selectors ================ //
 
@@ -151,11 +152,12 @@ export default manageListingsPageReducer;
  * @param {Array<UUID>} listingIds listing IDs to select from the store
  */
 export const getOwnListingsById = (state, listingIds) => {
-  const { ownEntities } = state.ManageListingsPage;
+
+  const { ownEntities } = state.WishListPage;
 
   const resources = listingIds.map(id => ({
     id,
-    type: 'ownListing',
+    type: 'listing',
   }));
   const throwIfNotFound = false;
   return denormalisedEntities(ownEntities, resources, throwIfNotFound);
@@ -167,76 +169,81 @@ export const getOwnListingsById = (state, listingIds) => {
 // but we don't want to mix own listings with searched listings
 // (own listings data contains different info - e.g. exact location etc.)
 export const addOwnEntities = sdkResponse => ({
-  type: ADD_OWN_ENTITIES,
+  type: WISH_LIST_ADD_OWN_ENTITIES,
   payload: sdkResponse,
 });
 
 export const openListingRequest = listingId => ({
-  type: OPEN_LISTING_REQUEST,
+  type: WISH_LIST_OPEN_LISTING_REQUEST,
   payload: { listingId },
 });
 
 export const openListingSuccess = response => ({
-  type: OPEN_LISTING_SUCCESS,
+  type: WISH_LIST_OPEN_LISTING_SUCCESS,
   payload: response.data,
 });
 
 export const openListingError = e => ({
-  type: OPEN_LISTING_ERROR,
+  type: WISH_LIST_OPEN_LISTING_ERROR,
   error: true,
   payload: e,
 });
 
 export const closeListingRequest = listingId => ({
-  type: CLOSE_LISTING_REQUEST,
+  type: WISH_LIST_CLOSE_LISTING_REQUEST,
   payload: { listingId },
 });
 
 export const closeListingSuccess = response => ({
-  type: CLOSE_LISTING_SUCCESS,
+  type: WISH_LIST_CLOSE_LISTING_SUCCESS,
   payload: response.data,
 });
 
 export const closeListingError = e => ({
-  type: CLOSE_LISTING_ERROR,
+  type: WISH_LIST_CLOSE_LISTING_ERROR,
   error: true,
   payload: e,
 });
 
 export const queryListingsRequest = queryParams => ({
-  type: FETCH_LISTINGS_REQUEST,
+  type: WISH_LIST_FETCH_LISTINGS_REQUEST,
   payload: { queryParams },
 });
 
 export const queryListingsSuccess = response => ({
-  type: FETCH_LISTINGS_SUCCESS,
+  type: WISH_LIST_FETCH_LISTINGS_SUCCESS,
   payload: { data: response.data },
 });
 
 export const queryListingsError = e => ({
-  type: FETCH_LISTINGS_ERROR,
+  type: WISH_LIST_FETCH_LISTINGS_ERROR,
   error: true,
   payload: e,
 });
 
 // Throwing error for new (loadData may need that info)
 export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
-  dispatch(queryListingsRequest(queryParams));
+  // dispatch(queryListingsRequest(queryParams));
+  let ids=null;
+  return sdk.currentUser.show().then(user => {
+    ids = user.data.data.attributes.profile.privateData.wishList.join(",")
+    return sdk.listings.query({
+      ids: ids,
+      include: ['images'],
+      'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+      'limit.images': 1,
+    }).then(response => {
 
-  const { perPage, ...rest } = queryParams;
-  const params = { ...rest, per_page: perPage };
-
-  return sdk.ownListings
-    .query(params)
-    .then(response => {
       dispatch(addOwnEntities(response));
       dispatch(queryListingsSuccess(response));
       return response;
     })
-    .catch(e => {
-      dispatch(queryListingsError(storableError(e)));
-      throw e;
-    });
+      .catch(e => {
+        dispatch(queryListingsError(storableError(e)));
+        throw e;
+      });
+  });
+
 };
 
 export const closeListing = listingId => (dispatch, getState, sdk) => {
@@ -268,14 +275,7 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
 };
 
 export const loadData = (params, search) => {
-  const queryParams = parse(search);
-  const page = queryParams.page || 1;
+
   return queryOwnListings({
-    ...queryParams,
-    page,
-    perPage: RESULT_PAGE_SIZE,
-    include: ['images'],
-    'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
-    'limit.images': 1,
   });
 };

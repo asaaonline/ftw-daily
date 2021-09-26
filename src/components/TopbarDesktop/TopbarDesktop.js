@@ -79,6 +79,15 @@ const TopbarDesktop = props => {
         <Avatar className={css.avatar} user={currentUser} disableProfileLink />
       </MenuLabel>
       <MenuContent className={css.profileMenuContent}>
+        <MenuItem key="wishListPage">
+          <NamedLink
+            className={classNames(css.yourListingsLink, currentPageClass('wishListPage'))}
+            name="wishListPage"
+          >
+            <span className={css.menuItemBorder} />
+            <FormattedMessage id="Wish list" />
+          </NamedLink>
+        </MenuItem>
         <MenuItem key="ManageListingsPage">
           <NamedLink
             className={classNames(css.yourListingsLink, currentPageClass('ManageListingsPage'))}

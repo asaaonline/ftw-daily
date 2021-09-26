@@ -8,6 +8,7 @@ import { NotFoundPage } from './containers';
 // at that point css bundling / imports will happen in wrong order.
 import { NamedRedirect } from './components';
 
+
 const pageDataLoadingAPI = getPageDataLoadingAPI();
 
 const AboutPage = loadable(() => import(/* webpackChunkName: "AboutPage" */ './containers/AboutPage/AboutPage'));
@@ -20,6 +21,7 @@ const InboxPage = loadable(() => import(/* webpackChunkName: "InboxPage" */ './c
 const LandingPage = loadable(() => import(/* webpackChunkName: "LandingPage" */ './containers/LandingPage/LandingPage'));
 const ListingPage = loadable(() => import(/* webpackChunkName: "ListingPage" */ /* webpackPrefetch: true */ './containers/ListingPage/ListingPage'));
 const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ './containers/ManageListingsPage/ManageListingsPage'));
+const WishListPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ './containers/WishListPage/WishListPage'));
 const PasswordChangePage = loadable(() => import(/* webpackChunkName: "PasswordChangePage" */ './containers/PasswordChangePage/PasswordChangePage'));
 const PasswordRecoveryPage = loadable(() => import(/* webpackChunkName: "PasswordRecoveryPage" */ './containers/PasswordRecoveryPage/PasswordRecoveryPage'));
 const PasswordResetPage = loadable(() => import(/* webpackChunkName: "PasswordResetPage" */ './containers/PasswordResetPage/PasswordResetPage'));
@@ -236,6 +238,14 @@ const routeConfiguration = () => {
       authPage: 'LoginPage',
       component: ManageListingsPage,
       loadData: pageDataLoadingAPI.ManageListingsPage.loadData,
+    },
+    {
+      path: '/wishListPage',
+      name: 'wishListPage',
+      auth: true,
+      authPage: 'LoginPage',
+      component: WishListPage,
+      loadData: pageDataLoadingAPI.WishListPage.loadData,
     },
     {
       path: '/account',

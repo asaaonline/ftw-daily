@@ -81,6 +81,8 @@ export const denormalisedEntities = (entities, resources, throwIfNotFound = true
     const { id, type } = res;
     const entityFound = entities[type] && id && entities[type][id.uuid];
     if (!entityFound) {
+      console.log("why this",entities)
+      console.log("this is reso",res)
       if (throwIfNotFound) {
         throw new Error(`Entity with type "${type}" and id "${id ? id.uuid : id}" not found`);
       }
