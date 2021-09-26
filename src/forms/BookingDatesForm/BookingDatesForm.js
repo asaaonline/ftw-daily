@@ -9,7 +9,13 @@ import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import { required, bookingDatesRequired, composeValidators } from '../../util/validators';
 import { START_DATE, END_DATE } from '../../util/dates';
 import { propTypes } from '../../util/types';
-import { Form, IconSpinner, PrimaryButton, FieldDateRangeInput } from '../../components';
+import {
+  Form,
+  IconSpinner,
+  PrimaryButton,
+  FieldDateRangeInput,
+  SecondaryButton,
+} from '../../components';
 import EstimatedBreakdownMaybe from './EstimatedBreakdownMaybe';
 
 import css from './BookingDatesForm.module.css';
@@ -75,7 +81,7 @@ export class BookingDatesFormComponent extends Component {
       return (
         <div className={classes}>
           <p className={css.error}>
-            <FormattedMessage id="BookingDatesForm.listingPriceMissing" />
+            <FormattedMessage id="BookingDatesForm.listingPriceMissing"/>
           </p>
         </div>
       );
@@ -84,7 +90,7 @@ export class BookingDatesFormComponent extends Component {
       return (
         <div className={classes}>
           <p className={css.error}>
-            <FormattedMessage id="BookingDatesForm.listingCurrencyInvalid" />
+            <FormattedMessage id="BookingDatesForm.listingCurrencyInvalid"/>
           </p>
         </div>
       );
@@ -102,6 +108,7 @@ export class BookingDatesFormComponent extends Component {
             formId,
             handleSubmit,
             intl,
+            addToWishList,
             isOwnListing,
             submitButtonWrapperClassName,
             unitType,
@@ -111,9 +118,14 @@ export class BookingDatesFormComponent extends Component {
             lineItems,
             fetchLineItemsInProgress,
             fetchLineItemsError,
+            listingId
           } = fieldRenderProps;
           const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
+          const addToWishListSubmit = () => {
+            console.log("this is all data",listingId.uuid)
+            addToWishList(listingId.uuid);
 
+          };
           const bookingStartLabel = intl.formatMessage({
             id: 'BookingDatesForm.bookingStartTitle',
           });
@@ -131,7 +143,7 @@ export class BookingDatesFormComponent extends Component {
           });
           const timeSlotsError = fetchTimeSlotsError ? (
             <p className={css.sideBarError}>
-              <FormattedMessage id="BookingDatesForm.timeSlotsError" />
+              <FormattedMessage id="BookingDatesForm.timeSlotsError"/>
             </p>
           ) : null;
 
@@ -143,10 +155,10 @@ export class BookingDatesFormComponent extends Component {
           const bookingData =
             startDate && endDate
               ? {
-                  unitType,
-                  startDate,
-                  endDate,
-                }
+                unitType,
+                startDate,
+                endDate,
+              }
               : null;
 
           const showEstimatedBreakdown =
@@ -155,19 +167,19 @@ export class BookingDatesFormComponent extends Component {
           const bookingInfoMaybe = showEstimatedBreakdown ? (
             <div className={css.priceBreakdownContainer}>
               <h3 className={css.priceBreakdownTitle}>
-                <FormattedMessage id="BookingDatesForm.priceBreakdownTitle" />
+                <FormattedMessage id="BookingDatesForm.priceBreakdownTitle"/>
               </h3>
-              <EstimatedBreakdownMaybe bookingData={bookingData} lineItems={lineItems} />
+              <EstimatedBreakdownMaybe bookingData={bookingData} lineItems={lineItems}/>
             </div>
           ) : null;
 
           const loadingSpinnerMaybe = fetchLineItemsInProgress ? (
-            <IconSpinner className={css.spinner} />
+            <IconSpinner className={css.spinner}/>
           ) : null;
 
           const bookingInfoErrorMaybe = fetchLineItemsError ? (
             <span className={css.sideBarError}>
-              <FormattedMessage id="BookingDatesForm.fetchLineItemsError" />
+              <FormattedMessage id="BookingDatesForm.fetchLineItemsError"/>
             </span>
           ) : null;
 
@@ -188,8 +200,13 @@ export class BookingDatesFormComponent extends Component {
           const endDatePlaceholderText =
             endDatePlaceholder || intl.formatDate(tomorrow, dateFormatOptions);
           const submitButtonClasses = classNames(
-            submitButtonWrapperClassName || css.submitButtonWrapper
+            submitButtonWrapperClassName || css.submitButtonWrapper,
           );
+
+          const wishlistButton = classNames(
+            css.wishlistButtonWrapper,
+          );
+
 
           return (
             <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
@@ -217,7 +234,7 @@ export class BookingDatesFormComponent extends Component {
                 useMobileMargins
                 validate={composeValidators(
                   required(requiredMessage),
-                  bookingDatesRequired(startDateErrorMessage, endDateErrorMessage)
+                  bookingDatesRequired(startDateErrorMessage, endDateErrorMessage),
                 )}
                 disabled={fetchLineItemsInProgress}
               />
@@ -237,8 +254,14 @@ export class BookingDatesFormComponent extends Component {
               </p>
               <div className={submitButtonClasses}>
                 <PrimaryButton type="submit">
-                  <FormattedMessage id="BookingDatesForm.requestToBook" />
+                  <FormattedMessage id="BookingDatesForm.requestToBook"/>
                 </PrimaryButton>
+              </div>
+              <div className={wishlistButton}>
+                <SecondaryButton type="button"
+                                 onClick={addToWishListSubmit}>
+                  <FormattedMessage id="Wishlist"/>
+                </SecondaryButton>
               </div>
             </Form>
           );

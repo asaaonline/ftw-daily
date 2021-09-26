@@ -26,6 +26,7 @@ import {
 } from '../../util/data';
 import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
+import { addToWishList } from '../../ducks/user.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck';
 import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
 import {
@@ -179,6 +180,7 @@ export class ListingPageComponent extends Component {
       currentUser,
       getListing,
       getOwnListing,
+      onAddToWishList,
       intl,
       onManageDisableScrolling,
       params: rawParams,
@@ -197,6 +199,8 @@ export class ListingPageComponent extends Component {
       fetchLineItemsInProgress,
       fetchLineItemsError,
     } = this.props;
+
+
 
     const listingId = new UUID(rawParams.id);
     const isPendingApprovalVariant = rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT;
@@ -462,6 +466,7 @@ export class ListingPageComponent extends Component {
                   listing={currentListing}
                   isOwnListing={isOwnListing}
                   unitType={unitType}
+                  addToWishList={onAddToWishList}
                   onSubmit={handleBookingSubmit}
                   title={bookingTitle}
                   subTitle={bookingSubTitle}
@@ -524,6 +529,7 @@ ListingPageComponent.propTypes = {
   currentUser: propTypes.currentUser,
   getListing: func.isRequired,
   getOwnListing: func.isRequired,
+
   onManageDisableScrolling: func.isRequired,
   scrollingDisabled: bool.isRequired,
   enquiryModalOpenForListingId: string,
@@ -578,6 +584,7 @@ const mapStateToProps = state => {
     currentUser,
     getListing,
     getOwnListing,
+
     scrollingDisabled: isScrollingDisabled(state),
     enquiryModalOpenForListingId,
     showListingError,
@@ -596,6 +603,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   onManageDisableScrolling: (componentId, disableScrolling) =>
     dispatch(manageDisableScrolling(componentId, disableScrolling)),
+  onAddToWishList: (componentId) =>
+    dispatch(addToWishList(componentId)),
   callSetInitialValues: (setInitialValues, values, saveToSessionStorage) =>
     dispatch(setInitialValues(values, saveToSessionStorage)),
   onFetchTransactionLineItems: (bookingData, listingId, isOwnListing) =>

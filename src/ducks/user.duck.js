@@ -26,6 +26,9 @@ export const FETCH_CURRENT_USER_NOTIFICATIONS_REQUEST =
   'app/user/FETCH_CURRENT_USER_NOTIFICATIONS_REQUEST';
 export const FETCH_CURRENT_USER_NOTIFICATIONS_SUCCESS =
   'app/user/FETCH_CURRENT_USER_NOTIFICATIONS_SUCCESS';
+
+export const ADDED_TO_WISH_LIST_COMPLETE =
+  'app/user/ADDED_TO_WISH_LIST_COMPLETE';
 export const FETCH_CURRENT_USER_NOTIFICATIONS_ERROR =
   'app/user/FETCH_CURRENT_USER_NOTIFICATIONS_ERROR';
 
@@ -51,8 +54,8 @@ const mergeCurrentUser = (oldCurrentUser, newCurrentUser) => {
   return newCurrentUser === null
     ? null
     : oldCurrentUser === null
-    ? newCurrentUser
-    : { id, type, attributes, ...oldRelationships, ...relationships };
+      ? newCurrentUser
+      : { id, type, attributes, ...oldRelationships, ...relationships };
 };
 
 const initialState = {
@@ -103,6 +106,10 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, currentUserNotificationCountError: null };
     case FETCH_CURRENT_USER_NOTIFICATIONS_SUCCESS:
       return { ...state, currentUserNotificationCount: payload.transactions.length };
+
+    case ADDED_TO_WISH_LIST_COMPLETE:
+      return { ...state, wishlist: payload };
+
     case FETCH_CURRENT_USER_NOTIFICATIONS_ERROR:
       console.error(payload); // eslint-disable-line
       return { ...state, currentUserNotificationCountError: payload };
@@ -192,6 +199,11 @@ const fetchCurrentUserNotificationsRequest = () => ({
 
 export const fetchCurrentUserNotificationsSuccess = transactions => ({
   type: FETCH_CURRENT_USER_NOTIFICATIONS_SUCCESS,
+  payload: { transactions },
+});
+
+export const addedToWishListComplete = transactions => ({
+  type: ADDED_TO_WISH_LIST_COMPLETE,
   payload: { transactions },
 });
 
@@ -305,6 +317,36 @@ export const fetchCurrentUserNotifications = () => (dispatch, getState, sdk) => 
     })
     .catch(e => dispatch(fetchCurrentUserNotificationsError(storableError(e))));
 };
+
+
+export const addToWishList = (id) => (dispatch, getState, sdk) => {
+
+  sdk.currentUser.show().then(user => {
+    // res.data contains the response data
+
+    let arr = [];
+
+    if (user.data.data.attributes.profile.privateData.wishList) {
+    let list=  user.data.data.attributes.profile.privateData.wishList.filter(uuId => {
+        return uuId !== id;
+      });
+     arr=list
+    }
+    arr.push(id);
+    console.log('new array', arr);
+    sdk.currentUser.updateProfile({
+      privateData: {
+        wishList: arr,
+      },
+    }).then(res => {
+      // res.data
+      dispatch(addedToWishListComplete(res));
+    });
+  });
+
+
+};
+
 
 export const fetchCurrentUser = (params = null) => (dispatch, getState, sdk) => {
   dispatch(currentUserShowRequest());

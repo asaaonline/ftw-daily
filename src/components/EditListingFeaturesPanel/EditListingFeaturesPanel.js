@@ -55,7 +55,7 @@ const EditListingFeaturesPanel = props => {
           const { amenities = [] } = values;
 
           const updatedValues = {
-            publicData: { amenities },
+            publicData: { amenities }
           };
           onSubmit(updatedValues);
         }}

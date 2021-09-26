@@ -57,6 +57,7 @@ const BookingPanel = props => {
     unitType,
     onSubmit,
     title,
+    addToWishList,
     subTitle,
     authorDisplayName,
     onManageDisableScrolling,
@@ -126,6 +127,7 @@ const BookingPanel = props => {
             unitType={unitType}
             onSubmit={onSubmit}
             price={price}
+            addToWishList={addToWishList}
             listingId={listing.id}
             isOwnListing={isOwnListing}
             timeSlots={timeSlots}
@@ -185,6 +187,7 @@ BookingPanel.propTypes = {
   isOwnListing: bool,
   unitType: propTypes.bookingUnitType,
   onSubmit: func.isRequired,
+  addToWishList: func.isRequired,
   title: oneOfType([node, string]).isRequired,
   subTitle: oneOfType([node, string]),
   authorDisplayName: oneOfType([node, string]).isRequired,

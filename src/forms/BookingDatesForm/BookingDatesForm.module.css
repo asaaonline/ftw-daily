@@ -89,3 +89,15 @@
     width: 100%;
   }
 }
+
+
+.wishlistButtonWrapper {
+  flex-shrink: 0;
+  padding: 0 24px 24px 24px;
+  width: 100%;
+
+@media (--viewportMedium) {
+  padding: 0;
+  width: 100%;
+}
+}
