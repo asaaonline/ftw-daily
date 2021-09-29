@@ -114,7 +114,7 @@ const resolveTransitionMessage = (
   const isOwnTransition = transition.by === ownRole;
   const currentTransition = transition.transition;
   const displayName = otherUsersName;
-
+console.log("current",currentTransition)
   switch (currentTransition) {
 
     case TRANSITION_CONFIRM_PAYMENT:
