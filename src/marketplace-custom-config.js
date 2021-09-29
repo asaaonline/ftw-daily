@@ -165,6 +165,7 @@ export const sortConfig = {
     { key: '-createdAt', label: 'Oldest' },
     { key: '-price', label: 'Lowest price' },
     { key: 'price', label: 'Highest price' },
+    { key: 'meta_rating', label: 'Highest rate' },
 
     // The relevance is only used for keyword search, but the
     // parameter isn't sent to the Marketplace API. The key is purely

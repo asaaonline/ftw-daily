@@ -16,6 +16,7 @@
 // This enables nice stacktraces from the minified production bundle
 require('source-map-support').install();
 
+
 // Configure process.env with .env.* files
 require('./env').configureEnv();
 
@@ -59,6 +60,8 @@ const app = express();
 
 const errorPage = fs.readFileSync(path.join(buildPath, '500.html'), 'utf-8');
 
+const myModule = require('./notify-new-review-listings');
+
 // load sitemap and robots file structure
 // and write those into files
 sitemap(sitemapStructure()).toFile();
@@ -78,7 +81,7 @@ app.use(log.requestHandler());
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  })
+  }),
 );
 
 if (cspEnabled) {
@@ -87,7 +90,7 @@ if (cspEnabled) {
   app.use(
     bodyParser.json({
       type: ['json', 'application/csp-report'],
-    })
+    }),
   );
 
   // CSP can be turned on in report or block mode. In report mode, the
@@ -132,7 +135,7 @@ app.use('/static', express.static(path.join(buildPath, 'static')));
 // server robots.txt from the root
 app.use('/robots.txt', express.static(path.join(buildPath, 'robots.txt')));
 app.use(cookieParser());
-
+myModule.pollLoop();
 // These .well-known/* endpoints will be enabled if you are using FTW as OIDC proxy
 // https://www.sharetribe.com/docs/cookbook-social-logins-and-sso/setup-open-id-connect-proxy/
 // We need to handle these endpoints separately so that they are accessible by Flex
@@ -142,6 +145,7 @@ app.use('/.well-known', wellKnownRouter);
 // Use basic authentication when not in dev mode. This is
 // intentionally after the static middleware and /.well-known
 // endpoints as those will bypass basic auth.
+console.log("some thinf")
 if (!dev) {
   const USERNAME = process.env.BASIC_AUTH_USERNAME;
   const PASSWORD = process.env.BASIC_AUTH_PASSWORD;

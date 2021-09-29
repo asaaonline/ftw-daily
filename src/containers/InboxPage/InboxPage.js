@@ -54,6 +54,8 @@ const formatDate = (intl, date) => {
 export const txState = (intl, tx, type) => {
   const isOrder = type === 'order';
 
+  console.log("this is it",tx)
+
   if (txIsEnquired(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,

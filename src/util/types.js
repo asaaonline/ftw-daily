@@ -425,7 +425,7 @@ propTypes.sortConfig = shape({
   conflictingFilters: arrayOf(string),
   options: arrayOf(
     shape({
-      key: oneOf(['createdAt', '-createdAt', 'price', '-price', 'relevance']).isRequired,
+      key: oneOf(['createdAt', '-createdAt', 'price', '-price', 'relevance','meta_rating']).isRequired,
       label: string.isRequired,
       longLabel: string,
     })

@@ -108,7 +108,7 @@ const stateDescription = {
   // id is defined only to support Xstate format.
   // However if you have multiple transaction processes defined,
   // it is best to keep them in sync with transaction process aliases.
-  id: 'flex-default-process/release-1',
+  id: 'sca-preauth-nightly-booking/release-1',
 
   // This 'initial' state is a starting point for new transaction
   initial: STATE_INITIAL,
@@ -130,20 +130,11 @@ const stateDescription = {
     [STATE_PENDING_PAYMENT]: {
       on: {
         [TRANSITION_EXPIRE_PAYMENT]: STATE_PAYMENT_EXPIRED,
-        [TRANSITION_CONFIRM_PAYMENT]: STATE_PREAUTHORIZED,
+        [TRANSITION_CONFIRM_PAYMENT]: STATE_DELIVERED,
       },
     },
 
     [STATE_PAYMENT_EXPIRED]: {},
-    [STATE_PREAUTHORIZED]: {
-      on: {
-        [TRANSITION_DECLINE]: STATE_DECLINED,
-        [TRANSITION_EXPIRE]: STATE_DECLINED,
-        [TRANSITION_ACCEPT]: STATE_ACCEPTED,
-      },
-    },
-
-    [STATE_DECLINED]: {},
     [STATE_ACCEPTED]: {
       on: {
         [TRANSITION_CANCEL]: STATE_CANCELED,
