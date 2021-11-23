@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
-import { InlineTextButton } from '../../components';
+import { InlineTextButton, ReviewRating } from '../../components';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY } from '../../util/types';
 import config from '../../config';
 
@@ -15,6 +15,7 @@ const SectionHeading = props => {
     hostLink,
     showContactUser,
     onContactUser,
+    rating,
   } = props;
 
   const unitType = config.bookingUnitType;
@@ -41,7 +42,9 @@ const SectionHeading = props => {
         <h1 className={css.title}>{richTitle}</h1>
         <div className={css.author}>
           {category}
+
           <FormattedMessage id="ListingPage.hostedBy" values={{ name: hostLink }} />
+
           {showContactUser ? (
             <span className={css.contactWrapper}>
               <span className={css.separator}>•</span>
@@ -50,11 +53,23 @@ const SectionHeading = props => {
                 onClick={onContactUser}
                 enforcePagePreloadFor="SignupPage"
               >
+
                 <FormattedMessage id="ListingPage.contactUser" />
               </InlineTextButton>
             </span>
           ) : null}
+
         </div>
+        <div className={css.div__rating}>
+          <ReviewRating
+            rating={rating}
+          />
+          <div className={css.div__rating_count}>
+            {rating}
+          </div>
+
+        </div>
+
       </div>
     </div>
   );

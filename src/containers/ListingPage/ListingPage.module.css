@@ -23,7 +23,13 @@
 
 .sectionImages {
 }
-
+.div__rating{
+  display: flex;
+}
+.div__rating_count{
+  margin-left: 14px;
+  margin-top: 3px;
+}
 .threeToTwoWrapper {
   /* Layout */
   display: block;
