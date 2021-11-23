@@ -18,7 +18,7 @@ import {
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 
-import { closeListing, openListing, getOwnListingsById } from './WishListPage.duck';
+import { closeListing, openListing, getWishListById } from './WishListPage.duck';
 import css from './WishListPage.module.css';
 
 export class WishlistPageComponent extends Component {
@@ -137,7 +137,7 @@ export class WishlistPageComponent extends Component {
                     hasClosingError={closingErrorListingId.uuid === l.id.uuid}
                     renderSizes={renderSizes}
                   />
-                )):<h1>Wish list empty</h1>}
+                )):<h1>Wish list is empty</h1>}
               </div>
               {paginationLinks}
             </div>
@@ -200,7 +200,7 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
   } = state.WishListPage;
-  const listings = getOwnListingsById(state, currentPageResultIds);
+  const listings = getWishListById(state, currentPageResultIds);
   return {
     currentPageResultIds,
     listings,

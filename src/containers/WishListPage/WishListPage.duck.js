@@ -151,7 +151,7 @@ export default WishListPageReducer;
  * @param {Object} state the full Redux store
  * @param {Array<UUID>} listingIds listing IDs to select from the store
  */
-export const getOwnListingsById = (state, listingIds) => {
+export const getWishListById = (state, listingIds) => {
 
   const { ownEntities } = state.WishListPage;
 
@@ -224,24 +224,26 @@ export const queryListingsError = e => ({
 // Throwing error for new (loadData may need that info)
 export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
   // dispatch(queryListingsRequest(queryParams));
-  let ids=null;
+  let ids = null;
   return sdk.currentUser.show().then(user => {
-    ids = user.data.data.attributes.profile.privateData.wishList.join(",")
-    return sdk.listings.query({
-      ids: ids,
-      include: ['images'],
-      'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
-      'limit.images': 1,
-    }).then(response => {
+    if (user.data.data.attributes.profile.privateData.wishList && user.data.data.attributes.profile.privateData.wishList > 0) {
+      ids = user.data.data.attributes.profile.privateData.wishList.join(',');
+      return sdk.listings.query({
+        ids: ids,
+        include: ['images'],
+        'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+        'limit.images': 1,
+      }).then(response => {
 
-      dispatch(addOwnEntities(response));
-      dispatch(queryListingsSuccess(response));
-      return response;
-    })
-      .catch(e => {
-        dispatch(queryListingsError(storableError(e)));
-        throw e;
-      });
+        dispatch(addOwnEntities(response));
+        dispatch(queryListingsSuccess(response));
+        return response;
+      })
+        .catch(e => {
+          dispatch(queryListingsError(storableError(e)));
+          throw e;
+        });
+    }
   });
 
 };
@@ -276,6 +278,5 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
 
 export const loadData = (params, search) => {
 
-  return queryOwnListings({
-  });
+  return queryOwnListings({});
 };
