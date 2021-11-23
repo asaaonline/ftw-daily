@@ -365,6 +365,7 @@
   "ListingPage.descriptionTitle": "About this sauna",
   "ListingPage.editListing": "Edit listing",
   "ListingPage.editProfileLink": "Edit profile",
+  "ListingPage.wishlist": "Wish List",
   "ListingPage.errorLoadingListingMessage": "Could not load listing. Please try again.",
   "ListingPage.errorLoadingListingTitle": "Error in loading listing",
   "ListingPage.featuresTitle": "Amenities",

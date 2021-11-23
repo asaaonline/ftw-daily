@@ -260,7 +260,7 @@ export class BookingDatesFormComponent extends Component {
               <div className={wishlistButton}>
                 <SecondaryButton type="button"
                                  onClick={addToWishListSubmit}>
-                  <FormattedMessage id="Wishlist"/>
+                  <FormattedMessage id="ListingPage.wishlist"/>
                 </SecondaryButton>
               </div>
             </Form>

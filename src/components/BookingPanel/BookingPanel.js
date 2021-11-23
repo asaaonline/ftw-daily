@@ -12,6 +12,7 @@ import config from '../../config';
 import { ModalInMobile, Button } from '../../components';
 import { BookingDatesForm } from '../../forms';
 
+import wishListLogo from './../../assets/wishList.png';
 import css from './BookingPanel.module.css';
 
 // This defines when ModalInMobile shows content as Modal
@@ -83,8 +84,8 @@ const BookingPanel = props => {
   const subTitleText = !!subTitle
     ? subTitle
     : showClosedListingHelpText
-    ? intl.formatMessage({ id: 'BookingPanel.subTitleClosedListing' })
-    : null;
+      ? intl.formatMessage({ id: 'BookingPanel.subTitleClosedListing' })
+      : null;
 
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
@@ -92,12 +93,16 @@ const BookingPanel = props => {
   const unitTranslationKey = isNightly
     ? 'BookingPanel.perNight'
     : isDaily
-    ? 'BookingPanel.perDay'
-    : 'BookingPanel.perUnit';
+      ? 'BookingPanel.perDay'
+      : 'BookingPanel.perUnit';
 
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
+  const addToWishListSubmit = () => {
 
+    addToWishList(listing.id.uuid);
+
+  };
   return (
     <div className={classes}>
       <ModalInMobile
@@ -111,7 +116,7 @@ const BookingPanel = props => {
         <div className={css.modalHeading}>
           <h1 className={css.title}>{title}</h1>
           <div className={css.author}>
-            <FormattedMessage id="BookingPanel.hostedBy" values={{ name: authorDisplayName }} />
+            <FormattedMessage id="BookingPanel.hostedBy" values={{ name: authorDisplayName }}/>
           </div>
         </div>
 
@@ -145,21 +150,27 @@ const BookingPanel = props => {
             {formattedPrice}
           </div>
           <div className={css.perUnit}>
-            <FormattedMessage id={unitTranslationKey} />
+            <FormattedMessage id={unitTranslationKey}/>
           </div>
         </div>
 
         {showBookingDatesForm ? (
-          <Button
-            rootClassName={css.bookButton}
-            onClick={() => openBookModal(isOwnListing, isClosed, history, location)}
-          >
-            <FormattedMessage id="BookingPanel.ctaButtonMessage" />
-          </Button>
+          <>
+            <Button
+              rootClassName={css.bookButton}
+              onClick={() => openBookModal(isOwnListing, isClosed, history, location)}
+            >
+              <FormattedMessage id="BookingPanel.ctaButtonMessage"/>
+            </Button>
+
+             <a onClick={addToWishListSubmit}> <img className={css.img__wish_list} src={wishListLogo} alt="add to wish list"/></a>
+
+          </>
         ) : isClosed ? (
           <div className={css.closedListingButton}>
-            <FormattedMessage id="BookingPanel.closedListingButtonText" />
+            <FormattedMessage id="BookingPanel.closedListingButtonText"/>
           </div>
+
         ) : null}
       </div>
     </div>
@@ -213,5 +224,5 @@ BookingPanel.propTypes = {
 
 export default compose(
   withRouter,
-  injectIntl
+  injectIntl,
 )(BookingPanel);

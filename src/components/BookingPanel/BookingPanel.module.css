@@ -24,6 +24,11 @@
   }
 }
 
+.img__wish_list{
+  width: 59px;
+  margin-left: 8px;
+}
+
 .modalHeading {
   margin-top: 89px;
   margin-bottom: 36px;
