@@ -226,7 +226,7 @@ export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
   // dispatch(queryListingsRequest(queryParams));
   let ids = null;
   return sdk.currentUser.show().then(user => {
-    if (user.data.data.attributes.profile.privateData.wishList && user.data.data.attributes.profile.privateData.wishList > 0) {
+    if (user.data.data.attributes.profile.privateData.wishList) {
       ids = user.data.data.attributes.profile.privateData.wishList.join(',');
       return sdk.listings.query({
         ids: ids,

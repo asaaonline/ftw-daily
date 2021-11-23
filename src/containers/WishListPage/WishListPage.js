@@ -55,20 +55,20 @@ export class WishlistPageComponent extends Component {
 
     const loadingResults = (
       <h2>
-        <FormattedMessage id="ManageListingsPage.loadingOwnListings" />
+        <FormattedMessage id="ManageListingsPage.loadingOwnListings"/>
       </h2>
     );
 
     const queryError = (
       <h2 className={css.error}>
-        <FormattedMessage id="ManageListingsPage.queryError" />
+        <FormattedMessage id="ManageListingsPage.queryError"/>
       </h2>
     );
 
     const noResults =
       listingsAreLoaded && pagination.totalItems === 0 ? (
         <h1 className={css.title}>
-          <FormattedMessage id="ManageListingsPage.noResults" />
+          <FormattedMessage id="ManageListingsPage.noResults"/>
         </h1>
       ) : null;
 
@@ -113,8 +113,8 @@ export class WishlistPageComponent extends Component {
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <LayoutSingleColumn>
           <LayoutWrapperTopbar>
-            <TopbarContainer currentPage="ManageListingsPage" />
-            <UserNav selectedPageName="wishListPage" />
+            <TopbarContainer currentPage="ManageListingsPage"/>
+            <UserNav selectedPageName="wishListPage"/>
           </LayoutWrapperTopbar>
           <LayoutWrapperMain>
             {queryInProgress ? loadingResults : null}
@@ -123,7 +123,7 @@ export class WishlistPageComponent extends Component {
               {heading}
               <div className={css.listingCards}>
 
-                {listings.size>0?listings.map(l => (
+                {listings.length > 0 ? listings.map(l => (
                   <ManageListingCard
                     className={css.listingCard}
                     key={l.id.uuid}
@@ -137,13 +137,13 @@ export class WishlistPageComponent extends Component {
                     hasClosingError={closingErrorListingId.uuid === l.id.uuid}
                     renderSizes={renderSizes}
                   />
-                )):<h1>Wish list is empty</h1>}
+                )) : <h1>Wish list is empty</h1>}
               </div>
               {paginationLinks}
             </div>
           </LayoutWrapperMain>
           <LayoutWrapperFooter>
-            <Footer />
+            <Footer/>
           </LayoutWrapperFooter>
         </LayoutSingleColumn>
       </Page>
@@ -224,9 +224,9 @@ const mapDispatchToProps = dispatch => ({
 const ManageWishListPage = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
   ),
-  injectIntl
+  injectIntl,
 )(WishlistPageComponent);
 
 export default ManageWishListPage;
