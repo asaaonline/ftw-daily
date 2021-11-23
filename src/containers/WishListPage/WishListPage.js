@@ -170,7 +170,7 @@ WishlistPageComponent.propTypes = {
     listingId: propTypes.uuid.isRequired,
     error: propTypes.error.isRequired,
   }),
-  listings: arrayOf(propTypes.ownListing),
+  listings: arrayOf(propTypes.listing),
   onCloseListing: func.isRequired,
   onOpenListing: func.isRequired,
   openingListing: shape({ uuid: string.isRequired }),
