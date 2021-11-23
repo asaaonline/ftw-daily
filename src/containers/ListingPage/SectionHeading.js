@@ -62,7 +62,7 @@ const SectionHeading = props => {
         </div>
         <div className={css.div__rating}>
           <ReviewRating
-            rating={rating}
+            rating={Math.round(rating)}
           />
           <div className={css.div__rating_count}>
             {rating}
