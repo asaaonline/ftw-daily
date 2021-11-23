@@ -21,7 +21,7 @@ import { TopbarContainer } from '../../containers';
 import { closeListing, openListing, getOwnListingsById } from './WishListPage.duck';
 import css from './WishListPage.module.css';
 
-export class ManageListingsPageComponent extends Component {
+export class WishlistPageComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -122,7 +122,8 @@ export class ManageListingsPageComponent extends Component {
             <div className={css.listingPanel}>
               {heading}
               <div className={css.listingCards}>
-                {listings.map(l => (
+
+                {listings.size>0?listings.map(l => (
                   <ManageListingCard
                     className={css.listingCard}
                     key={l.id.uuid}
@@ -136,7 +137,7 @@ export class ManageListingsPageComponent extends Component {
                     hasClosingError={closingErrorListingId.uuid === l.id.uuid}
                     renderSizes={renderSizes}
                   />
-                ))}
+                )):<h1>Wish list empty</h1>}
               </div>
               {paginationLinks}
             </div>
@@ -150,7 +151,7 @@ export class ManageListingsPageComponent extends Component {
   }
 }
 
-ManageListingsPageComponent.defaultProps = {
+WishlistPageComponent.defaultProps = {
   listings: [],
   pagination: null,
   queryListingsError: null,
@@ -163,7 +164,7 @@ ManageListingsPageComponent.defaultProps = {
 
 const { arrayOf, bool, func, object, shape, string } = PropTypes;
 
-ManageListingsPageComponent.propTypes = {
+WishlistPageComponent.propTypes = {
   closingListing: shape({ uuid: string.isRequired }),
   closingListingError: shape({
     listingId: propTypes.uuid.isRequired,
@@ -220,12 +221,12 @@ const mapDispatchToProps = dispatch => ({
   onOpenListing: listingId => dispatch(openListing(listingId)),
 });
 
-const ManageListingsPage = compose(
+const ManageWishListPage = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps
   ),
   injectIntl
-)(ManageListingsPageComponent);
+)(WishlistPageComponent);
 
-export default ManageListingsPage;
+export default ManageWishListPage;

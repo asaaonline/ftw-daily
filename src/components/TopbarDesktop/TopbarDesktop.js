@@ -85,7 +85,7 @@ const TopbarDesktop = props => {
             name="wishListPage"
           >
             <span className={css.menuItemBorder} />
-            <FormattedMessage id="Wish list" />
+            <FormattedMessage id="ProfilePage.wishlist" />
           </NamedLink>
         </MenuItem>
         <MenuItem key="ManageListingsPage">

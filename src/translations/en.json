@@ -685,6 +685,8 @@
   "ProfilePage.reviewsOfCustomerTitle": "Reviews from Hosts ({count})",
   "ProfilePage.reviewsOfProviderTitle": "Reviews from Guests ({count})",
   "ProfilePage.schemaTitle": "{name} | {siteTitle}",
+  "ProfilePage.wishlist": "Wish List",
+
   "ProfileSettingsForm.addYourProfilePicture": "+ Add your profile picture…",
   "ProfileSettingsForm.addYourProfilePictureMobile": "+ Add",
   "ProfileSettingsForm.bioHeading": "Your profile bio",
