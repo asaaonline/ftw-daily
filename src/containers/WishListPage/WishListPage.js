@@ -20,6 +20,7 @@ import { TopbarContainer } from '../../containers';
 
 import { closeListing, openListing, getWishListById } from './WishListPage.duck';
 import css from './WishListPage.module.css';
+import ListingCard from '../../components/ListingCard/ListingCard';
 
 export class WishlistPageComponent extends Component {
   constructor(props) {
@@ -124,7 +125,7 @@ export class WishlistPageComponent extends Component {
               <div className={css.listingCards}>
 
                 {listings.length > 0 ? listings.map(l => (
-                  <ManageListingCard
+                  <ListingCard
                     className={css.listingCard}
                     key={l.id.uuid}
                     listing={l}
