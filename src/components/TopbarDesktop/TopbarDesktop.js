@@ -81,7 +81,7 @@ const TopbarDesktop = props => {
       <MenuContent className={css.profileMenuContent}>
         <MenuItem key="wishListPage">
           <NamedLink
-            className={classNames(css.yourListingsLink, currentPageClass('wishListPage'))}
+            className={classNames(css.yourListingsLink, currentPageClass('WishListPage'))}
             name="wishListPage"
           >
             <span className={css.menuItemBorder} />

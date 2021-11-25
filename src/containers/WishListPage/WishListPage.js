@@ -114,7 +114,7 @@ export class WishlistPageComponent extends Component {
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <LayoutSingleColumn>
           <LayoutWrapperTopbar>
-            <TopbarContainer currentPage="ManageListingsPage"/>
+            <TopbarContainer currentPage="WishListPage"/>
             <UserNav selectedPageName="wishListPage"/>
           </LayoutWrapperTopbar>
           <LayoutWrapperMain>
